@@ -1,6 +1,9 @@
 {
-  "admin": {
-    "password": "ADAC-1804",
-    "role": "admin"
-  }
+  "users": [
+    {
+      "username": "admin",
+      "password": "adminpass",
+      "role": "admin"
+    }
+  ]
 }
