@@ -71,6 +71,21 @@ async def add_user(request):
         json.dump(users, f, indent=2)
     return web.json_response({"status": "success"})
 
+@routes.post("/auth")
+async def authenticate(request):
+    data = await request.json()
+    try:
+        with open("data/users.json", "r", encoding="utf-8") as f:
+            content = f.read()
+            users = json.loads(content) if content.strip() else {}
+    except (FileNotFoundError, json.JSONDecodeError):
+        return web.Response(status=403, text="Keine Nutzer gefunden")
+
+    user = users.get(data.get("username"))
+    if user and user["password"] == data.get("password"):
+        return web.json_response({"status": "ok", "role": user["role"]})
+    return web.Response(status=403, text="Ungültige Anmeldedaten")
+
 def create_app():
     app = web.Application()
     app.add_routes(routes)
